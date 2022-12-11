@@ -1,4 +1,4 @@
-
+import React from 'react';
 import Userlogin from './page/userlogin/Userlogin';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import User from '../src/page/user/User';
@@ -9,7 +9,7 @@ function App() {
   return (
     <div className="App">
 
-<BrowserRouter>
+    <BrowserRouter>
       <Routes>
       <Route path="/" element={<Userlogin />} />
       <Route path="/user/:id" element={<User />} />

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { Button } from "@mui/material";
+import "./user.scss";
 
 
 function User() {
@@ -8,7 +10,7 @@ function User() {
     const params = useParams();
 
     useEffect(() => {
-        getUserDB();
+     getUserDB();
     }, []);
     let [voteright,setVoteRight] = useState(false);
     async function getUserDB(){
@@ -28,16 +30,20 @@ function User() {
     let [voteId,setVoteId] = useState([]);
 //    let [hasVoted, setHasVoted] = useState(false);
     async function handleVote(e){
-        console.log(voteId)
+        //console.log(voteId)
         let data = {votecount: 1, username: voteId[0]}
-        console.log(data)
+       // console.log(data)
         let resp = await axios.put(`http://localhost:4000/user/post/`,data);
 
         if(resp.data === "success"){
             data = {username: params.id, voted : "yes"}
-            let resp2 = await axios.put(`http://localhost:4000/user/post1/`, data);
-
+            let resp1 = await axios.put(`http://localhost:4000/user/post1/`, data);
+            if(resp1.data === "success"){
+                setVoteRight(true);
+            }
         }
+        
+
            
     }
 
@@ -46,23 +52,35 @@ function User() {
         {
         voteright
         ?
-        <div> Already Voted</div>
+        <div className="voteright">
+        <h2>This User has Voted</h2>
+        <Button className="home">
+        <Link to="/" >Home </Link>
+        </Button>
+        </div>
         :
         <div>
+        Vote for any one User:
 
         {userData.map((user,i)=>{
             if(user.username === params.id && user.voted === "yes"){
-                return(<p> Already Voted</p>)
+                return(<div>
+                        <p>This User has Voted</p>
+                        <Button className="home">
+                        <Link to="/" >Home </Link>
+                        </Button>
+                        </div>)
             }else {
-                
-                if(i>0){
-                    
-                    return(<li key={user.username}>{user.username} vote <button type="radio" onClick={()=>setVoteId([user.username])}></button></li>)
+                if(i>0){                
+                    return(<p key={user.username}>{i}.
+                    Vote for {user.username}  
+                     <input type="radio" className="one" name="one" sx={{margin: "10px","border-bottom-color" : "rgba(0, 0, 0, 0)"}} onClick={()=>setVoteId([user.username])}></input>                
+                    </p>)
                 }
             }
         })}
      
-        <button onClick={handleVote}>Submit Vote</button>
+        <Button onClick={handleVote} sx={{margin: "10px"}} >Submit Vote</Button>
 
         </div>
 

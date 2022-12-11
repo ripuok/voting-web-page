@@ -2,12 +2,12 @@ const express = require('express');
 const router = express.Router();
 
 var mysql = require('mysql');
-const { CLIENT_IGNORE_SIGPIPE } = require('mysql/lib/protocol/constants/client');
+
 var con = mysql.createConnection({
   host: "localhost",
-  user: "ram",
+  user: "ripu",
   password: "Qwerty@123",
-  database: "userdb"
+  database: "votingdb"
 });
 
 
@@ -22,10 +22,10 @@ con.connect(function(err) {
 router.post('/',async function(req,res){
     try{        
         let {username,password,emailid,phone} = req.body
-        var sql = "INSERT INTO user (username, password ,mobile , emailid ) VALUES ('"+username+"','"+password+"','"+emailid+"','"+phone+"') ";
+        var sql = "INSERT INTO users (username, password , emailid ,mobile) VALUES ('"+username+"','"+password+"','"+emailid+"','"+phone+"') ";
     con.query(sql, function (err, result) {
       if (err) throw err;
-      console.log("1 record inserted");
+      //console.log("1 record inserted");
       res.send(result) 
     });
           
@@ -37,7 +37,7 @@ router.post('/',async function(req,res){
 
 router.get('/',async function(req,res){
     try{        
-        con.query("SELECT * FROM user", function (err, result, fields) {
+        con.query("SELECT * FROM users", function (err, result, fields) {
             if (err) throw err;
          res.send(result)   
         });          
@@ -47,9 +47,9 @@ router.get('/',async function(req,res){
 });
 
 router.put('/post', async function(req,res){
-    let {votecount, username} = req.body;
-    var sql = "UPDATE user SET votecount = ? WHERE username = '"+username+"'";
-    con.query(sql,votecount, function (err, result,fields) {
+    let { username} = req.body;
+    var sql = "UPDATE users SET votecount = votecount + 1 WHERE username = '"+username+"'";
+    con.query(sql, function (err, result,fields) {
         if (err) throw err;
         console.log(result)
     res.send("success")
@@ -57,7 +57,7 @@ router.put('/post', async function(req,res){
 
 router.put('/post1', async function(req,res){
     let {username, voted} = req.body;
-    var sql = "UPDATE user SET voted = ? WHERE username = ?";
+    var sql = "UPDATE users SET voted = ? WHERE username = ?";
     con.query(sql,[voted,username], function (err, result,fields) {
         if (err) throw err;
     res.send("success")
@@ -65,10 +65,10 @@ router.put('/post1', async function(req,res){
 
 router.post('/data/',async function(req,res){
     try{ 
-    console.log(req.body)
+   // console.log(req.body)
     let {username} = req.body;
 
-    var sql = "SELECT * FROM user WHERE username = ?";
+    var sql = "SELECT * FROM users WHERE username = ?";
     con.query(sql,username, function (err, result,fields) {
     if (err) throw err;
     //console.log(fields)
@@ -87,18 +87,23 @@ router.post('/login/',async function(req,res){
     try{ 
     let {username,password} = req.body;
 
-    var sql = "SELECT * FROM user WHERE username = ?";
+    var sql = "SELECT * FROM users WHERE username = ?";
     con.query(sql,username, function (err, result,fields) {
     if (err) throw err;
     //console.log(fields)
-    console.log(result[0].password)
-    if(result[0].password === password){
-        if(username === "admin"){
-            res.send("admin")
+    //console.log(result[0].password)
+    try{
+
+        if(result[0].password === password){
+            if(username === "admin"){
+                res.send("admin")
+            }else {
+                res.send("login true")
+            }
         }else {
-            res.send("login true")
+            res.send("Wrong username password")
         }
-    }else {
+    }catch(e){
         res.send("Wrong username password")
     }
     // console.log(result);
@@ -111,22 +116,28 @@ router.post('/login/',async function(req,res){
     }
 });
 
-// var sql = "INSERT INTO customers (name, address) VALUES ('Company Inc', 'Highway 37')";
 
-// router.post('/',async function(req,res){
-//     try{        
-//         var sql = "INSERT INTO customers (name, address) VALUES ('Company Inc', 'Highway 37')";
-//     con.query(sql, function (err, result) {
-//       if (err) throw err;
-//       console.log("1 record inserted");
-//       res.json(result) 
-//     });
-          
+router.post('/username/',async function(req,res){
+    try{ 
+    let {username} = req.body;
+
+    var sql = "SELECT * FROM users WHERE username = '"+username+"'";
+    con.query(sql, function (err, result,fields) {
+    if (err) throw err;
+    if(result[0] === "undefined"){
+        res.send("ok")
+    }else {
+        res.send("User exits")
+    }
+    
+    // res.send(result[0])
+    });
+
                   
-//     }catch( error ){
-//         console.log(error);
-//     }
-// });
+}catch( error ){
+        console.log(error);
+    }
+});
 
 
 

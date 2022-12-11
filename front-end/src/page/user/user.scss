@@ -1,0 +1,58 @@
+
+.User{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row; 
+    margin: 10px;
+    padding: 20px;
+    // box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    // width: 400px ;
+
+    .voteright{
+        display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; 
+    margin-top: 50px;
+
+    }
+
+    Button{
+        margin-top: 10px;
+        cursor: pointer;
+        font-size: 15px;
+        background: #01d28e;
+        border: 1px solid #01d28e;
+        color: #fff;
+        margin: 20px;
+        padding: 6px 15px;
+        align-items: center;
+        justify-self: center;
+        width: fit-content;
+    }
+
+    .home{
+        margin-top: 10px;
+        cursor: pointer;
+        font-size: 15px;
+        background: #01d28e;
+        border: 1px solid #01d28e;
+        color: #fff;
+        margin: 20px;
+        padding: 6px 15px;
+        align-items: center;
+        justify-self: center;
+        width: fit-content;
+    }
+
+    input{     
+        margin: 10px;
+        margin-top: 15px;
+        
+
+      }
+
+    
+
+}
