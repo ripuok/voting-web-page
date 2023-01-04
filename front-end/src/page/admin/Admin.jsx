@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import axios from 'axios';
 import "./admin.scss";
 import { Button } from "@mui/material";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import {BASE_URL} from "../../services/helper.js"; //${BASE_URL}
 
 
 function Admin() {
@@ -14,7 +15,7 @@ function Admin() {
 
     async function getUserDB(){
         
-    let resp = await axios.get(`http://localhost:4000/user/`);
+    let resp = await axios.get(`${BASE_URL}/user/`);
     // console.log(resp.data)
     let data = resp.data;
     setUserData([...data]); 
@@ -26,7 +27,7 @@ function Admin() {
     <br/>
     
     
-    {userData
+    {userData    // eslint-disable-next-line 
     .map((user,i)=>{
 
       if(i>0){                

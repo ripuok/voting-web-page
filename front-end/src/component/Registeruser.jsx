@@ -2,8 +2,8 @@
 import { Button, Input } from "@mui/material";
 import axios from "axios";
 import {  useState } from "react";
-import "./registeruser.scss"
-
+import "./registeruser.scss";
+import {BASE_URL} from "../services/helper.js"; //${BASE_URL}
 
 
 function Registeruser() {
@@ -14,6 +14,7 @@ function Registeruser() {
         phone: "",
 
     });
+    let [errormsg1,setErrormsg1] = useState(false)
 
     function handle1Change(e){
         let {name , value} = e.target;
@@ -23,11 +24,14 @@ function Registeruser() {
                 [name]:value
             })
         })
+        if(name === "username"){
+            setErrormsg1(false)
+        }
     }
    let [issubmitted,setIssubmitted] = useState(false)
 
     async function handleCreateUser(){
-        await axios.post('http://localhost:4000/user/',userInfo);
+        await axios.post(`${BASE_URL}/user/`,userInfo);
         //console.log(resp.data)
 
         setUserInfo({
@@ -39,16 +43,19 @@ function Registeruser() {
         })
         setIssubmitted(true)
     }
-    let [errormsg1,setErrormsg1] = useState(false)
+
     async function validateInput(e){
         // let {username} = e.target;
         // console.log(username)
-        let resp = await axios.post('http://localhost:4000/user/username',{"username": userInfo.username});
+        let resp = await axios.post(`${BASE_URL}/user/username`,{"username": userInfo.username});
         if(resp.data === "User exits"){
-            setErrormsg1(true);
-        }else {
-            setErrormsg1(false)
+        setErrormsg1(true);
+        // console.log(errormsg1)
+
+        return;
         }
+        setErrormsg1(false);
+        // console.log(errormsg1)
 
     }
 
@@ -70,7 +77,7 @@ function Registeruser() {
         <label for="username" >Username :</label>
         <Input type="text" placeholder="Enter Username" name="username" value={userInfo.username} onChange={handle1Change} onBlur={validateInput} />
         </div>
-            {errormsg1&&<span className="error"> Error: Username already Exists</span>}
+        {errormsg1 && <span className="error"> Error: Username already Exists</span>}
         <div>
         <label>Password :</label>
         <Input type="password" placeholder="Enter Password" name="password" value={userInfo.password} onChange={handle1Change} />

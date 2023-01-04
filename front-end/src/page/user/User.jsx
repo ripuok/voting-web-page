@@ -3,21 +3,21 @@ import axios from 'axios';
 import { Link, useParams } from "react-router-dom";
 import { Button } from "@mui/material";
 import "./user.scss";
-
+import {BASE_URL} from "../../services/helper.js"; //${BASE_URL}
 
 function User() {
     let [userData, setUserData] = useState([]);
     const params = useParams();
 
     useEffect(() => {
-     getUserDB();
+     getUserDB();// eslint-disable-next-line
     }, []);
     let [voteright,setVoteRight] = useState(false);
     async function getUserDB(){
         let data = {username: params.id};
-        let resp = await axios.get(`http://localhost:4000/user/`);
+        let resp = await axios.get(`${BASE_URL}/user/`);
         // console.log(resp.data)
-        data = resp.data;
+        data = resp.data;// eslint-disable-next-line
         data.map((user,i)=>{
         if(user.username === params.id && user.voted === "yes"){
         setVoteRight(true)
@@ -33,11 +33,11 @@ function User() {
         //console.log(voteId)
         let data = {votecount: 1, username: voteId[0]}
        // console.log(data)
-        let resp = await axios.put(`http://localhost:4000/user/post/`,data);
-
+        let resp = await axios.put(`${BASE_URL}/user/post/`,data);
+        console.log(resp.data);
         if(resp.data === "success"){
             data = {username: params.id, voted : "yes"}
-            let resp1 = await axios.put(`http://localhost:4000/user/post1/`, data);
+            let resp1 = await axios.put(`${BASE_URL}/user/post1/`, data);
             if(resp1.data === "success"){
                 setVoteRight(true);
             }
@@ -62,7 +62,8 @@ function User() {
         <div>
         Vote for any one User:
 
-        {userData.map((user,i)=>{
+        {userData// eslint-disable-next-line
+        .map((user,i)=>{
             if(user.username === params.id && user.voted === "yes"){
                 return(<div>
                         <p>This User has Voted</p>
@@ -94,7 +95,7 @@ export default User;
 
 // async function getUserDB(){
 //     let data = {username: params.id};
-//     let resp = await axios.post(`http://localhost:4000/user/data/`,data);
+//     let resp = await axios.post(`${BASE_URL}/user/data/`,data);
 //     console.log(resp.data)
 //     data = resp.data;
 //     setUserData(()=> [data]); 

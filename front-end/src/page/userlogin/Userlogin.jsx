@@ -4,6 +4,8 @@ import { Link , Navigate} from "react-router-dom";
 import Registeruser from "../../component/Registeruser";
 import { Button, Input } from "@mui/material";
 import "./userlogin.scss";
+import {BASE_URL} from "../../services/helper.js"; //${BASE_URL}
+
 
 function Userlogin() {
     let [selector,setSelector]=useState(true);
@@ -22,6 +24,7 @@ function Userlogin() {
                 [name]: value
             })
         })
+        // setErrormsg(false)
 
     }
 
@@ -32,7 +35,7 @@ function Userlogin() {
     async function handleSubmit(e){
        // console.log(data)
 
-        let resp = await axios.post(`http://localhost:4000/user/login`,data)
+        let resp = await axios.post(`${BASE_URL}/user/login`,data)
         //console.log(resp)
         if(resp.data ==="admin"){
             setAdmin(true);
