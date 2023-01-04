@@ -1,17 +1,21 @@
+require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 
+                                                           
 var mysql = require('mysql');
 
+// var con = mysql.createConnection({
+//     host: "localhost",
+//     user: "ripu",
+//     password: "Qwerty@123",
+//     database: "votingdb"
 var con = mysql.createConnection({
-  host: "localhost",
-  user: "ripu",
-  password: "Qwerty@123",
-  database: "votingdb"
-});
-
-
-
+    host: "bergxmxnrh47mjtrl1ws-mysql.services.clever-cloud.com",
+    user: "ubgbi1lqtefxmgjx",
+    password: process.env.password,
+    database: "bergxmxnrh47mjtrl1ws"
+  });
 
 con.connect(function(err) {
     if (err) throw err;
@@ -20,7 +24,12 @@ con.connect(function(err) {
 });
 
 router.post('/',async function(req,res){
-    try{        
+    try{
+    // con.connect(function(err) {
+    //     if (err) throw err;
+    //     //console.log("Connected!");
+        
+    // });        
         let {username,password,emailid,phone} = req.body
         var sql = "INSERT INTO users (username, password , emailid ,mobile) VALUES ('"+username+"','"+password+"','"+emailid+"','"+phone+"') ";
     con.query(sql, function (err, result) {
@@ -29,7 +38,7 @@ router.post('/',async function(req,res){
       res.send(result) 
     });
           
-                  
+    // con.end();             
     }catch( error ){
         console.log(error);
     }
@@ -124,12 +133,16 @@ router.post('/username/',async function(req,res){
     var sql = "SELECT * FROM users WHERE username = '"+username+"'";
     con.query(sql, function (err, result,fields) {
     if (err) throw err;
-    if(result[0] === "undefined"){
+    
+    if(result[0] === undefined){
         res.send("ok")
-    }else {
+    }else if(result[0].username === username){       
         res.send("User exits")
+    }else {
+        res.send("ok")
     }
     
+    // console.log("here" ,result[0].username)
     // res.send(result[0])
     });
 
