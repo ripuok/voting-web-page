@@ -13,7 +13,7 @@ var mysql = require('mysql');
 var con = mysql.createConnection({
     host: "bergxmxnrh47mjtrl1ws-mysql.services.clever-cloud.com",
     user: "ubgbi1lqtefxmgjx",
-    password: process.env.password,
+    password: process.env.PASSWORD,
     database: "bergxmxnrh47mjtrl1ws"
   });
 
