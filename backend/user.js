@@ -17,19 +17,19 @@ var con = mysql.createConnection({
     database: "bergxmxnrh47mjtrl1ws"
   });
 
-con.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected!");
+// con.connect(function(err) {
+//     if (err) throw err;
+//     console.log("Connected!");
     
-});
+// });
 
 router.post('/',async function(req,res){
     try{
-    // con.connect(function(err) {
-    //     if (err) throw err;
-    //     //console.log("Connected!");
+    con.connect(function(err) {
+        if (err) throw err;
+        //console.log("Connected!");
         
-    // });        
+    });        
         let {username,password,emailid,phone} = req.body
         var sql = "INSERT INTO users (username, password , emailid ,mobile) VALUES ('"+username+"','"+password+"','"+emailid+"','"+phone+"') ";
     con.query(sql, function (err, result) {
@@ -38,42 +38,68 @@ router.post('/',async function(req,res){
       res.send(result) 
     });
           
-    // con.end();             
+    con.end();             
     }catch( error ){
         console.log(error);
     }
 });
 
 router.get('/',async function(req,res){
-    try{        
+    try{
+        con.connect(function(err) {
+            if (err) throw err;
+            //console.log("Connected!");
+            
+        });           
         con.query("SELECT * FROM users", function (err, result, fields) {
             if (err) throw err;
          res.send(result)   
-        });          
+        });        
+    con.end();             
+
     }catch( error ){
         console.log(error);
     }
 });
 
 router.put('/post', async function(req,res){
+    con.connect(function(err) {
+        if (err) throw err;
+        //console.log("Connected!");
+        
+    });   
     let { username} = req.body;
     var sql = "UPDATE users SET votecount = votecount + 1 WHERE username = '"+username+"'";
     con.query(sql, function (err, result,fields) {
         if (err) throw err;
         console.log(result)
     res.send("success")
+    con.end();             
+
 })})
 
 router.put('/post1', async function(req,res){
+    con.connect(function(err) {
+        if (err) throw err;
+        //console.log("Connected!");
+        
+    });   
     let {username, voted} = req.body;
     var sql = "UPDATE users SET voted = ? WHERE username = ?";
     con.query(sql,[voted,username], function (err, result,fields) {
         if (err) throw err;
     res.send("success")
+    con.end();             
+
 })})
 
 router.post('/data/',async function(req,res){
     try{ 
+    con.connect(function(err) {
+        if (err) throw err;
+        //console.log("Connected!");
+        
+    });   
    // console.log(req.body)
     let {username} = req.body;
 
@@ -85,6 +111,7 @@ router.post('/data/',async function(req,res){
     // console.log(result);
     // res.send(result) 
     });
+    con.end();             
 
                   
 }catch( error ){
@@ -94,6 +121,11 @@ router.post('/data/',async function(req,res){
 
 router.post('/login/',async function(req,res){
     try{ 
+    con.connect(function(err) {
+        if (err) throw err;
+        //console.log("Connected!");
+        
+    });   
     let {username,password} = req.body;
 
     var sql = "SELECT * FROM users WHERE username = ?";
@@ -118,6 +150,7 @@ router.post('/login/',async function(req,res){
     // console.log(result);
     // res.send(result) 
     });
+    con.end();             
 
                   
 }catch( error ){
@@ -128,6 +161,11 @@ router.post('/login/',async function(req,res){
 
 router.post('/username/',async function(req,res){
     try{ 
+    con.connect(function(err) {
+        if (err) throw err;
+        //console.log("Connected!");
+        
+    });   
     let {username} = req.body;
 
     var sql = "SELECT * FROM users WHERE username = '"+username+"'";
@@ -146,6 +184,7 @@ router.post('/username/',async function(req,res){
     // res.send(result[0])
     });
 
+    con.end();             
                   
 }catch( error ){
         console.log(error);
